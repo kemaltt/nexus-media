@@ -124,7 +124,7 @@ export class EmailService {
       attachments: [
         {
           filename: 'logo.png',
-          path: '/Users/kemalnew/project/GitHub/sozial-media/mobile/assets/images/icon.png',
+          path: '/Users/kemalnew/project/GitHub/nexus-media/mobile/assets/images/icon.png',
           cid: 'logo',
         },
       ],
@@ -156,7 +156,7 @@ export class EmailService {
       attachments: [
         {
           filename: 'logo.png',
-          path: '/Users/kemalnew/project/GitHub/sozial-media/mobile/assets/images/icon.png',
+          path: '/Users/kemalnew/project/GitHub/nexus-media/mobile/assets/images/icon.png',
           cid: 'logo',
         },
       ],
@@ -188,7 +188,7 @@ export class EmailService {
       attachments: [
         {
           filename: 'logo.png',
-          path: '/Users/kemalnew/project/GitHub/sozial-media/mobile/assets/images/icon.png',
+          path: '/Users/kemalnew/project/GitHub/nexus-media/mobile/assets/images/icon.png',
           cid: 'logo',
         },
       ],

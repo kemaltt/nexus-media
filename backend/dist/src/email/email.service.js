@@ -68,16 +68,16 @@ let EmailService = class EmailService {
               margin-bottom: 32px;
             }
             .code-box {
-              background: linear-gradient(135deg, #7F3DFF 0%, #632AD1 100%);
+              background-color: #f3f0ff;
+              border: 2px dashed #7F3DFF;
               padding: 24px;
               text-align: center;
               font-size: 36px;
               font-weight: 800;
               letter-spacing: 8px;
-              color: #ffffff;
+              color: #7F3DFF;
               margin: 24px 0;
               border-radius: 16px;
-              box-shadow: 0 8px 16px rgba(127, 61, 255, 0.2);
             }
             .info {
               font-size: 14px;
@@ -96,7 +96,7 @@ let EmailService = class EmailService {
           <div class="container">
             <div class="card">
               <div class="logo">
-                <img src="cid:logo" alt="Nexus Logo" style="width: 80px; height: 80px; border-radius: 16px; margin-bottom: 24px;" />
+                <img src="cid:logo" alt="NEXUS Logo" style="width: 80px; height: 80px; border-radius: 16px; margin-bottom: 24px;" />
               </div>
               <h1 class="title">${title}</h1>
               <p class="subtitle">${subtitle}</p>
@@ -104,7 +104,7 @@ let EmailService = class EmailService {
               <p class="info">${footerText}</p>
             </div>
             <div class="footer">
-              &copy; ${new Date().getFullYear()} Nexus Team. Alle Rechte vorbehalten.
+              &copy; ${new Date().getFullYear()} NEXUS Team. Alle Rechte vorbehalten.
             </div>
           </div>
         </body>
@@ -113,18 +113,18 @@ let EmailService = class EmailService {
     }
     async sendVerificationEmail(to, code) {
         const from = this.configService.get('EMAIL_FROM');
-        const title = 'Willkommen bei Nexus!';
+        const title = 'Willkommen bei NEXUS!';
         const subtitle = 'Vielen Dank für Ihre Anmeldung. Bitte verwenden Sie den folgenden 6-stelligen Code, um Ihre Registrierung abzuschließen:';
         const footerText = 'Dieser Code ist <b>10 Minuten</b> lang gültig. Wenn Sie dieses Konto nicht erstellt haben, ignorieren Sie bitte diese E-Mail.';
         const mailOptions = {
             from,
             to,
-            subject: 'Nexus - Bestätigungscode',
+            subject: 'NEXUS - Bestätigungscode',
             html: this.getHtmlTemplate(title, subtitle, code, footerText),
             attachments: [
                 {
                     filename: 'logo.png',
-                    path: '/Users/kemalnew/project/GitHub/sozial-media/mobile/assets/images/icon.png',
+                    path: '/Users/kemalnew/project/GitHub/nexus-media/mobile/assets/images/icon.png',
                     cid: 'logo',
                 },
             ],
@@ -146,12 +146,12 @@ let EmailService = class EmailService {
         const mailOptions = {
             from,
             to,
-            subject: 'Nexus - Passwort zurücksetzen',
+            subject: 'NEXUS - Passwort zurücksetzen',
             html: this.getHtmlTemplate(title, subtitle, code, footerText),
             attachments: [
                 {
                     filename: 'logo.png',
-                    path: '/Users/kemalnew/project/GitHub/sozial-media/mobile/assets/images/icon.png',
+                    path: '/Users/kemalnew/project/GitHub/nexus-media/mobile/assets/images/icon.png',
                     cid: 'logo',
                 },
             ],
@@ -159,6 +159,33 @@ let EmailService = class EmailService {
         try {
             await this.transporter.sendMail(mailOptions);
             console.log(`Password reset email sent to ${to}`);
+        }
+        catch (error) {
+            console.error('Email sending failed:', error);
+            throw error;
+        }
+    }
+    async sendPasswordChangeEmail(to, code) {
+        const from = this.configService.get('EMAIL_FROM');
+        const title = 'Passwortänderung';
+        const subtitle = 'Sie möchten Ihr Passwort ändern. Bitte verwenden Sie den folgenden Bestätigungscode:';
+        const footerText = 'Dieser Code ist <b>10 Minuten</b> lang gültig. Wenn Sie keine Passwortänderung angefordert haben, ignorieren Sie bitte diese E-Mail.';
+        const mailOptions = {
+            from,
+            to,
+            subject: 'NEXUS - Bestätigungscode zur Passwortänderung',
+            html: this.getHtmlTemplate(title, subtitle, code, footerText),
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: '/Users/kemalnew/project/GitHub/nexus-media/mobile/assets/images/icon.png',
+                    cid: 'logo',
+                },
+            ],
+        };
+        try {
+            await this.transporter.sendMail(mailOptions);
+            console.log(`Password change code email sent to ${to}`);
         }
         catch (error) {
             console.error('Email sending failed:', error);

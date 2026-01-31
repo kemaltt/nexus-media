@@ -1,0 +1,62 @@
+@import "tailwindcss";
+@config "../../tailwind.config.js";
+
+:root {
+  --primary: #7F3DFF;
+  --primary-hover: #6b34d9;
+  --primary-light: #f3efff;
+  
+  --background-dark: #171021;
+  --surface-dark: #251F30;
+  --card-dark: #121214;
+  --border-dark: #333333;
+  --text-primary-dark: #FFFFFF;
+  --text-secondary-dark: #A1A1A1;
+  
+  --background-light: #F8F9FA;
+  --surface-light: #F3F4F6;
+  --card-light: #FFFFFF;
+  --border-light: #E5E7EB;
+  --text-primary-light: #171021;
+  --text-secondary-light: #6B7280;
+
+  --background: var(--background-dark);
+  --surface: var(--surface-dark);
+  --card: var(--card-dark);
+  --border: var(--border-dark);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+}
+
+@layer base {
+  body {
+    background-color: var(--background-dark);
+    color: var(--text-primary-dark);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .glass {
+    background-color: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: white;
+    font-weight: 700;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+  }
+}
