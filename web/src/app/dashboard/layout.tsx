@@ -41,6 +41,7 @@ export default function DashboardLayout({
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         setUser(JSON.parse(storedUser));
       } catch (e) {
         console.error("Failed to parse user data", e);

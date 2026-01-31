@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import {
   Youtube,
   Instagram,
@@ -36,7 +37,7 @@ export default function CreatePostPage() {
   const platforms: {
     id: SocialPlatform;
     name: string;
-    icon: any;
+    icon: React.ElementType;
     color: string;
     bg: string;
   }[] = [
@@ -214,9 +215,10 @@ export default function CreatePostPage() {
                       )}
                     </div>
                     {file.type.startsWith("image") && (
-                      <img
+                      <Image
                         src={URL.createObjectURL(file)}
                         alt="preview"
+                        fill
                         className="absolute inset-0 w-full h-full object-cover"
                       />
                     )}

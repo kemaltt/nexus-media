@@ -11,7 +11,6 @@ import {
   Moon,
   Sun,
   Smartphone,
-  Check,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
@@ -109,7 +108,7 @@ export default function SettingsPage() {
 
   const handlePreferenceUpdate = (
     key: keyof typeof preferences,
-    value: any,
+    value: Theme | Language,
   ) => {
     setPreferences((prev) => ({ ...prev, [key]: value }));
     // Here act like we saved it

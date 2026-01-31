@@ -13,8 +13,6 @@ import {
   AlertCircle,
   Users,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import api from "@/lib/api";
 
 type SocialPlatform =
   | "youtube"
@@ -34,7 +32,6 @@ interface Account {
 }
 
 export default function AccountsPage() {
-  const router = useRouter();
   const [accounts, setAccounts] = useState<Account[]>([
     {
       id: "1",
@@ -48,10 +45,10 @@ export default function AccountsPage() {
       platform: "instagram",
       username: "@nexustech_official",
       connectedAt: "2024-01-20T14:30:00Z",
+      connectedAt: "2024-01-20T14:30:00Z",
       status: "expired",
     },
   ]);
-  const [loading, setLoading] = useState(false);
 
   // Helper to get platform details
   const getPlatformDetails = (platform: SocialPlatform) => {
