@@ -13,6 +13,8 @@ import {
   X,
   Bell,
   Search,
+  Send,
+  Clock,
 } from "lucide-react";
 
 export default function DashboardLayout({
@@ -44,6 +46,8 @@ export default function DashboardLayout({
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Create Post", href: "/dashboard/create", icon: Send },
+    { name: "History", href: "/dashboard/history", icon: Clock },
     { name: "Accounts", href: "/dashboard/accounts", icon: Users },
     { name: "Analytics", href: "/dashboard/analytics", icon: BarChart2 },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
