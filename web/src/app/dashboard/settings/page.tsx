@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   User,
   Lock,
@@ -14,6 +14,7 @@ import {
   Check,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import api from "@/lib/api";
 import { CheckCircle } from "lucide-react"; // Keeping the helper import
 
 type SettingsTab = "profile" | "security" | "notifications" | "preferences";
@@ -37,28 +38,58 @@ export default function SettingsPage() {
 
   // Profile Form State
   const [profile, setProfile] = useState({
-    fullName: "John Doe",
-    email: "john@example.com",
-    bio: "Social media manager & content creator.",
+    fullName: "",
+    email: "",
+    username: "",
   });
 
-  // Password Form State
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const data = JSON.parse(storedUser);
+        setProfile({
+          fullName: data.name || "",
+          email: data.email || "",
+          username: data.username || "",
+        });
+      } catch (e) {
+        console.error("Failed to parse user data", e);
+      }
+    }
+  }, []);
+
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data } = await api.patch("/users/profile", {
+        name: profile.fullName,
+        // username: profile.username,
+      });
+
+      // Update local storage
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const currentUser = JSON.parse(storedUser);
+        const updatedUser = { ...currentUser, ...data };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+      }
+
+      setSuccessMessage("Profile updated successfully!");
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (error) {
+      console.error("Failed to update profile", error);
+      alert("Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
   const [password, setPassword] = useState({
     current: "",
     new: "",
     confirm: "",
   });
-
-  const handleProfileUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      setSuccessMessage("Profile updated successfully!");
-      setTimeout(() => setSuccessMessage(""), 3000);
-    }, 1000);
-  };
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,19 +162,6 @@ export default function SettingsPage() {
                   value={profile.email}
                   disabled
                   className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-500 cursor-not-allowed"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Bio
-                </label>
-                <textarea
-                  value={profile.bio}
-                  onChange={(e) =>
-                    setProfile({ ...profile, bio: e.target.value })
-                  }
-                  rows={4}
-                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                 />
               </div>
             </div>

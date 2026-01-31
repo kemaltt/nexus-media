@@ -19,8 +19,9 @@ export default function LoginPage() {
 
     try {
       const response = await api.post("/auth/login", { email, password });
-      const { access_token } = response.data;
+      const { access_token, user } = response.data;
       localStorage.setItem("token", access_token);
+      localStorage.setItem("user", JSON.stringify(user));
       window.location.href = "/dashboard";
     } catch (err: unknown) {
       if (err && typeof err === "object" && "response" in err) {

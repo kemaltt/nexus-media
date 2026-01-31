@@ -37,8 +37,15 @@ export default function DashboardLayout({
       return;
     }
 
-    // Mock user for now (or decode token if we had a decoder)
-    setUser({ name: "John Doe", email: "john@example.com" });
+    // Get user from local storage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse user data", e);
+      }
+    }
   }, [router]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
