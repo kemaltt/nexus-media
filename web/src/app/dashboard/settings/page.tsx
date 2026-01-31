@@ -1,17 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { User, Lock, Bell, Shield, LogOut } from "lucide-react";
+import {
+  User,
+  Lock,
+  Bell,
+  Shield,
+  LogOut,
+  Globe,
+  Moon,
+  Sun,
+  Smartphone,
+  Check,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
-import api from "@/lib/api";
+import { CheckCircle } from "lucide-react"; // Keeping the helper import
 
-type SettingsTab = "profile" | "security" | "notifications";
+type SettingsTab = "profile" | "security" | "notifications" | "preferences";
+type Theme = "light" | "dark" | "system";
+type Language = "en" | "tr" | "de";
 
 export default function SettingsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+
+  // Preferences State
+  const [preferences, setPreferences] = useState<{
+    theme: Theme;
+    language: Language;
+  }>({
+    theme: "system",
+    language: "en",
+  });
 
   // Profile Form State
   const [profile, setProfile] = useState({
@@ -52,6 +74,16 @@ export default function SettingsPage() {
       setPassword({ current: "", new: "", confirm: "" });
       setTimeout(() => setSuccessMessage(""), 3000);
     }, 1000);
+  };
+
+  const handlePreferenceUpdate = (
+    key: keyof typeof preferences,
+    value: any,
+  ) => {
+    setPreferences((prev) => ({ ...prev, [key]: value }));
+    // Here act like we saved it
+    setSuccessMessage(`Preferences updated: ${value}`);
+    setTimeout(() => setSuccessMessage(""), 2000);
   };
 
   const handleLogout = () => {
@@ -248,6 +280,88 @@ export default function SettingsPage() {
             </div>
           </div>
         );
+
+      case "preferences":
+        return (
+          <div className="space-y-8 max-w-2xl">
+            {/* Language Selection */}
+            <section>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Language
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                  { id: "en", name: "English", flag: "🇺🇸" },
+                  { id: "tr", name: "Türkçe", flag: "🇹🇷" },
+                  { id: "de", name: "Deutsch", flag: "🇩🇪" },
+                ].map((lang) => (
+                  <button
+                    key={lang.id}
+                    onClick={() => handlePreferenceUpdate("language", lang.id)}
+                    className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
+                      preferences.language === lang.id
+                        ? "border-purple-500 bg-purple-50 ring-1 ring-purple-500"
+                        : "border-gray-200 bg-white hover:border-purple-200 hover:bg-gray-50"
+                    }`}
+                  >
+                    <span className="flex items-center gap-3">
+                      <span className="text-2xl">{lang.flag}</span>
+                      <span
+                        className={`font-medium ${preferences.language === lang.id ? "text-purple-700" : "text-gray-700"}`}
+                      >
+                        {lang.name}
+                      </span>
+                    </span>
+                    {preferences.language === lang.id && (
+                      <CheckCircle size={18} className="text-purple-600" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <hr className="border-gray-100" />
+
+            {/* Theme Selection */}
+            <section>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Appearance
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                  { id: "light", name: "Light", icon: Sun },
+                  { id: "dark", name: "Dark", icon: Moon },
+                  { id: "system", name: "System", icon: Smartphone },
+                ].map((theme) => (
+                  <button
+                    key={theme.id}
+                    onClick={() => handlePreferenceUpdate("theme", theme.id)}
+                    className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all gap-3 ${
+                      preferences.theme === theme.id
+                        ? "border-purple-500 bg-purple-50 ring-1 ring-purple-500"
+                        : "border-gray-200 bg-white hover:border-purple-200 hover:bg-gray-50"
+                    }`}
+                  >
+                    <div
+                      className={`p-2 rounded-full ${
+                        preferences.theme === theme.id
+                          ? "bg-white text-purple-600"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      <theme.icon size={24} />
+                    </div>
+                    <span
+                      className={`font-medium ${preferences.theme === theme.id ? "text-purple-700" : "text-gray-700"}`}
+                    >
+                      {theme.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          </div>
+        );
     }
   };
 
@@ -267,6 +381,7 @@ export default function SettingsPage() {
             { id: "profile", label: "Profile", icon: User },
             { id: "security", label: "Security", icon: Lock },
             { id: "notifications", label: "Notifications", icon: Bell },
+            { id: "preferences", label: "Preferences", icon: Globe },
           ].map((item) => (
             <button
               key={item.id}
@@ -311,6 +426,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-// Helper import for CheckCircle which is used in success message
-import { CheckCircle } from "lucide-react";
