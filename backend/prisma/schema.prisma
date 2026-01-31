@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String          @id @default(uuid())
+  email         String          @unique
+  password      String?
+  name          String?
+  role          Role            @default(USER)
+  licenseType   LicenseType     @default(FREE)
+  status        UserStatus      @default(ACTIVE)
+  googleId      String?         @unique
+  appleId       String?         @unique
+  googleLoginEnabled Boolean      @default(true)
+  lastLoginAt   DateTime?
+  timezone      String?         @default("UTC")
+  isVerified        Boolean         @default(false)
+  verificationCode  String?
+  verificationExpires DateTime?
+  resetPasswordCode    String?
+  resetPasswordExpires DateTime?
+  passwordChangeCode   String?
+  passwordChangeExpires DateTime?
+  profileImage  String?
+  username      String?         @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  socialAccounts SocialAccount[]
+  posts         Post[]
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum LicenseType {
+  FREE
+  PREMIUM
+  BUSINESS
+}
+
+enum UserStatus {
+  ACTIVE
+  PASSIVE
+  CANCELLED
+  CANCELLED_REQUEST
+}
+
+enum Platform {
+  INSTAGRAM
+  TIKTOK
+  YOUTUBE
+  FACEBOOK
+  X
+}
+
+enum SocialAccountStatus {
+  ACTIVE
+  NEEDS_REAUTH
+  REVOKED
+  PENDING_REVIEW
+}
+
+enum TokenType {
+  BEARER
+  USER_CONTEXT
+  OAUTH1A
+}
+
+model SocialAccount {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  platform     Platform
+  platformId   String   // The ID of the account on the social platform
+  accessToken  String   // Encrypted
+  refreshToken String?  // Encrypted
+  tokenExpires DateTime?
+  tokenType    TokenType @default(BEARER)
+  scopes       String[]
+  status       SocialAccountStatus @default(ACTIVE)
+  username     String?
+  profileImage String?
+  lastSyncedAt DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  postAttempts PostAttempt[]
+
+  @@unique([userId, platform, platformId])
+}
+
+model Post {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  content     String?
+  mediaUrls   String[] // Array of URLs (could be base64 strings or S3 links)
+  scheduledAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  attempts    PostAttempt[]
+}
+
+enum PostStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model PostAttempt {
+  id              String        @id @default(uuid())
+  postId          String
+  post            Post          @relation(fields: [postId], references: [id])
+  socialAccountId String
+  socialAccount   SocialAccount @relation(fields: [socialAccountId], references: [id])
+  status          PostStatus   @default(PENDING)
+  platformPostId  String?      // ID return by the platform (e.g. IG media ID)
+  errorMessage    String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
