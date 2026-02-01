@@ -1,11 +1,11 @@
-"use client";
-
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import api from "@/lib/api";
 
 export default function RegisterPage() {
+  const t = useTranslations("Auth");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,15 +52,10 @@ export default function RegisterPage() {
 
         <div className="relative z-10 flex-1 flex flex-col justify-center space-y-6">
           <h2 className="text-5xl font-bold text-white leading-tight">
-            Join thousands of
-            <br />
-            creators managing
-            <br />
-            their reach
+            {t("joinThousands")}
           </h2>
           <p className="text-white/80 text-lg max-w-md">
-            Get started for free and take control of your social media presence
-            across all platforms.
+            {t("getStarted")}
           </p>
         </div>
 
@@ -84,11 +79,12 @@ export default function RegisterPage() {
           </div>
 
           <div className="space-y-2">
+          <div className="space-y-2">
             <h1 className="text-3xl font-bold text-gray-900">
-              Create an account
+              {t("createAccount")}
             </h1>
             <p className="text-gray-500">
-              Get started with your free account today
+              Start managing your social media properly today
             </p>
           </div>
 

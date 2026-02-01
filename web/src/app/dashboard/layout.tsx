@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
@@ -15,6 +16,7 @@ import {
   Search,
   Send,
   Clock,
+  Globe,
 } from "lucide-react";
 
 export default function DashboardLayout({
@@ -23,6 +25,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<{ name: string; email: string } | null>(
@@ -52,13 +55,14 @@ export default function DashboardLayout({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+  const t = useTranslations("Common");
+
   const navigation = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Create Post", href: "/dashboard/create", icon: Send },
-    { name: "History", href: "/dashboard/history", icon: Clock },
-    { name: "Accounts", href: "/dashboard/accounts", icon: Users },
-    { name: "Analytics", href: "/dashboard/analytics", icon: BarChart2 },
-    { name: "Settings", href: "/dashboard/settings", icon: Settings },
+    { name: t("dashboard"), href: "/dashboard", icon: LayoutDashboard },
+    { name: t("createPost"), href: "/dashboard/create", icon: Send },
+    { name: t("history"), href: "/dashboard/history", icon: Clock },
+    { name: t("accounts"), href: "/dashboard/accounts", icon: Users },
+    { name: t("analytics"), href: "/dashboard/analytics", icon: BarChart2 },
   ];
 
   const handleLogout = () => {
@@ -124,24 +128,20 @@ export default function DashboardLayout({
 
         {/* User & Logout */}
         <div className="p-4 border-t border-white/10">
-          <div className="flex items-center gap-3 mb-4 px-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold">
-              {user?.name?.[0] || "U"}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">
-                {user?.name}
-              </p>
-              <p className="text-xs text-gray-400 truncate">{user?.email}</p>
-            </div>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center px-3 py-2 text-sm font-medium text-red-400 hover:bg-white/5 rounded-lg transition-colors"
+          <Link
+            href="/dashboard/settings"
+            className={`flex items-center px-3 py-2.5 rounded-lg transition-colors group ${
+              pathname === "/dashboard/settings"
+                ? "bg-purple-600/20 text-purple-400"
+                : "text-gray-400 hover:bg-white/5 hover:text-white"
+            }`}
           >
-            <LogOut size={18} className="mr-3" />
-            Sign Out
-          </button>
+            <Settings
+              size={20}
+              className={`mr-3 ${pathname === "/dashboard/settings" ? "text-purple-400" : "text-gray-500 group-hover:text-white"}`}
+            />
+            <span className="font-medium">{t("settings")}</span>
+          </Link>
         </div>
       </aside>
 
@@ -175,9 +175,63 @@ export default function DashboardLayout({
               <Bell size={20} />
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full" />
             </button>
+            {/* Language Selector */}
+            <div className="relative group z-50">
+              <button
+                className="p-2 text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
+                onClick={() =>
+                  setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
+                }
+                onBlur={() =>
+                  setTimeout(() => setIsLanguageDropdownOpen(false), 200)
+                }
+              >
+                <Globe size={20} />
+              </button>
+              {isLanguageDropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 animate-in fade-in zoom-in-95 duration-200">
+                  {[
+                    { code: "de", label: "Deutsch", flag: "🇩🇪" },
+                    { code: "en", label: "English", flag: "🇺🇸" },
+                    { code: "tr", label: "Türkçe", flag: "🇹🇷" },
+                  ].map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        document.cookie = `NEXT_LOCALE=${lang.code}; path=/; max-age=31536000`;
+                        window.location.reload();
+                      }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                    >
+                      <span className="text-xl">{lang.flag}</span>
+                      <span className="font-medium">{lang.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="h-8 w-px bg-gray-200 mx-2" />
-            {/* Mobile User Avatar (visible only on mobile if sidebar is closed, technically standard header logic) */}
-            <div className="md:hidden w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500" />
+
+            {/* User Profile & Logout */}
+            <div className="flex items-center gap-3">
+              <div className="hidden md:block text-right">
+                <p className="text-sm font-medium text-gray-900 leading-none">
+                  {user?.name}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">{user?.email}</p>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">
+                {user?.name?.[0] || "U"}
+              </div>
+              <button
+                onClick={handleLogout}
+                className="p-2 text-gray-400 hover:text-red-500 transition-colors ml-1"
+                title={t("logout")}
+              >
+                <LogOut size={20} />
+              </button>
+            </div>
           </div>
         </header>
 

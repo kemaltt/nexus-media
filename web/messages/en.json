@@ -1,0 +1,52 @@
+{
+  "Common": {
+    "dashboard": "Dashboard",
+    "createPost": "Create Post",
+    "history": "History",
+    "accounts": "Accounts",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "logout": "Sign Out",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "Auth": {
+    "welcomeBack": "Welcome back",
+    "enterCredentials": "Enter your credentials to access your account",
+    "email": "Email address",
+    "password": "Password",
+    "signIn": "Sign in",
+    "dontHaveAccount": "Don't have an account?",
+    "signUp": "Sign up for free",
+    "joinThousands": "Join thousands of creators managing their reach",
+    "getStarted": "Get started for free and take control of your social media presence across all platforms.",
+    "fullName": "Full name",
+    "createAccount": "Create an account",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "Settings": {
+    "title": "Account Settings",
+    "subtitle": "Manage your profile, security, and preferences.",
+    "tabs": {
+      "profile": "Profile",
+      "security": "Security",
+      "notifications": "Notifications",
+      "preferences": "Preferences"
+    },
+    "profile": {
+      "changeAvatar": "Change Avatar",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "updated": "Profile updated successfully!",
+      "saveChanges": "Save Changes"
+    },
+    "preferences": {
+      "language": "Language",
+      "appearance": "Appearance",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
+  }
+}

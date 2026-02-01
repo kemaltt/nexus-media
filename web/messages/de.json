@@ -1,0 +1,52 @@
+{
+  "Common": {
+    "dashboard": "Dashboard",
+    "createPost": "Beitrag erstellen",
+    "history": "Verlauf",
+    "accounts": "Konten",
+    "analytics": "Analytik",
+    "settings": "Einstellungen",
+    "logout": "Abmelden",
+    "loading": "Laden...",
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  },
+  "Auth": {
+    "welcomeBack": "Willkommen zurück",
+    "enterCredentials": "Geben Sie Ihre Zugangsdaten ein, um auf Ihr Konto zuzugreifen",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "signIn": "Anmelden",
+    "dontHaveAccount": "Noch kein Konto?",
+    "signUp": "Kostenlos registrieren",
+    "joinThousands": "Schließen Sie sich Tausenden von Kreativen an",
+    "getStarted": "Starten Sie kostenlos und übernehmen Sie die Kontrolle über Ihre Social-Media-Präsenz.",
+    "fullName": "Vollständiger Name",
+    "createAccount": "Konto erstellen",
+    "alreadyHaveAccount": "Haben Sie bereits ein Konto?"
+  },
+  "Settings": {
+    "title": "Kontoeinstellungen",
+    "subtitle": "Verwalten Sie Ihr Profil, Sicherheit und Einstellungen.",
+    "tabs": {
+      "profile": "Profil",
+      "security": "Sicherheit",
+      "notifications": "Benachrichtigungen",
+      "preferences": "Präferenzen"
+    },
+    "profile": {
+      "changeAvatar": "Avatar ändern",
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail-Adresse",
+      "updated": "Profil erfolgreich aktualisiert!",
+      "saveChanges": "Änderungen speichern"
+    },
+    "preferences": {
+      "language": "Sprache",
+      "appearance": "Erscheinungsbild",
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System"
+    }
+  }
+}

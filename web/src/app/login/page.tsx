@@ -1,11 +1,11 @@
-"use client";
-
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import api from "@/lib/api";
 
 export default function LoginPage() {
+  const t = useTranslations("Auth");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -63,10 +63,7 @@ export default function LoginPage() {
             <br />
             one place
           </h2>
-          <p className="text-white/80 text-lg max-w-md">
-            Schedule posts, analyze performance, and grow your audience across
-            YouTube, Instagram, Facebook, X, and TikTok.
-          </p>
+          <p className="text-white/80 text-lg max-w-md">{t("getStarted")}</p>
         </div>
 
         {/* Decorative circles */}
@@ -89,10 +86,10 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900">Welcome back</h1>
-            <p className="text-gray-500">
-              Enter your credentials to access your account
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {t("welcomeBack")}
+            </h1>
+            <p className="text-gray-500">{t("enterCredentials")}</p>
           </div>
 
           {error && (

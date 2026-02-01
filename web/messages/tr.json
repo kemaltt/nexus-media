@@ -1,0 +1,52 @@
+{
+  "Common": {
+    "dashboard": "Panel",
+    "createPost": "Gönderi Oluştur",
+    "history": "Geçmiş",
+    "accounts": "Hesaplar",
+    "analytics": "Analizler",
+    "settings": "Ayarlar",
+    "logout": "Çıkış Yap",
+    "loading": "Yükleniyor...",
+    "save": "Kaydet",
+    "cancel": "İptal"
+  },
+  "Auth": {
+    "welcomeBack": "Tekrar Hoşgeldiniz",
+    "enterCredentials": "Hesabınıza erişmek için bilgilerinizi girin",
+    "email": "E-posta adresi",
+    "password": "Şifre",
+    "signIn": "Giriş Yap",
+    "dontHaveAccount": "Hesabınız yok mu?",
+    "signUp": "Ücretsiz Kaydol",
+    "joinThousands": "Binlerce içerik üreticisine katılın",
+    "getStarted": "Ücretsiz başlayın ve tüm platformlardaki sosyal medya varlığınızı kontrol altına alın.",
+    "fullName": "Ad Soyad",
+    "createAccount": "Hesap Oluştur",
+    "alreadyHaveAccount": "Zaten hesabınız var mı?"
+  },
+  "Settings": {
+    "title": "Hesap Ayarları",
+    "subtitle": "Profilinizi, güvenliğinizi ve tercihlerinizi yönetin.",
+    "tabs": {
+      "profile": "Profil",
+      "security": "Güvenlik",
+      "notifications": "Bildirimler",
+      "preferences": "Tercihler"
+    },
+    "profile": {
+      "changeAvatar": "Avatarı Değiştir",
+      "fullName": "Ad Soyad",
+      "email": "E-posta Adresi",
+      "updated": "Profil başarıyla güncellendi!",
+      "saveChanges": "Değişiklikleri Kaydet"
+    },
+    "preferences": {
+      "language": "Dil",
+      "appearance": "Görünüm",
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem"
+    }
+  }
+}
