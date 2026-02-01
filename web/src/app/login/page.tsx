@@ -23,14 +23,17 @@ export default function LoginPage() {
       localStorage.setItem("token", access_token);
       localStorage.setItem("user", JSON.stringify(user));
       window.location.href = "/dashboard";
-    } catch (err: unknown) {
-      if (err && typeof err === "object" && "response" in err) {
-        setError(
-          (err as { response: { data: { message: string } } }).response?.data
-            ?.message || "Login failed. Please try again.",
-        );
+    } catch (err: any) {
+      console.error("Login error:", err);
+      // Check for specific backend error message
+      if (err.response?.data?.message) {
+        // NestJS sometimes returns an array of messages
+        const message = err.response.data.message;
+        setError(Array.isArray(message) ? message[0] : message);
+      } else if (err.message) {
+        setError(err.message);
       } else {
-        setError("Login failed. Please try again.");
+        setError("Login failed. Please check your credentials and try again.");
       }
     } finally {
       setLoading(false);
@@ -41,7 +44,7 @@ export default function LoginPage() {
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left Side - Branding */}
       <div
-        className="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden"
+        className="hidden lg:flex flex-col p-12 relative overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
@@ -52,7 +55,7 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <div className="relative z-10 space-y-6">
+        <div className="relative z-10 flex-1 flex flex-col justify-center space-y-6">
           <h2 className="text-5xl font-bold text-white leading-tight">
             Manage all your
             <br />

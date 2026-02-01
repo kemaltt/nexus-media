@@ -39,7 +39,7 @@ export default function RegisterPage() {
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left Side - Branding */}
       <div
-        className="hidden lg:flex flex-col justify-between p-12 relative overflow-hidden"
+        className="hidden lg:flex flex-col p-12 relative overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
@@ -50,7 +50,7 @@ export default function RegisterPage() {
           </Link>
         </div>
 
-        <div className="relative z-10 space-y-6">
+        <div className="relative z-10 flex-1 flex flex-col justify-center space-y-6">
           <h2 className="text-5xl font-bold text-white leading-tight">
             Join thousands of
             <br />

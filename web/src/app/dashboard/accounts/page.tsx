@@ -45,7 +45,6 @@ export default function AccountsPage() {
       platform: "instagram",
       username: "@nexustech_official",
       connectedAt: "2024-01-20T14:30:00Z",
-      connectedAt: "2024-01-20T14:30:00Z",
       status: "expired",
     },
   ]);
