@@ -19,7 +19,11 @@ const post_module_1 = require("./post/post.module");
 const email_module_1 = require("./email/email.module");
 const user_module_1 = require("./user/user.module");
 const integrations_module_1 = require("./integrations/integrations.module");
+const logger_middleware_1 = require("./common/middleware/logger.middleware");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
