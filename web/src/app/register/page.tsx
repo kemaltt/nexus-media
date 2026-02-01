@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -54,9 +56,7 @@ export default function RegisterPage() {
           <h2 className="text-5xl font-bold text-white leading-tight">
             {t("joinThousands")}
           </h2>
-          <p className="text-white/80 text-lg max-w-md">
-            {t("getStarted")}
-          </p>
+          <p className="text-white/80 text-lg max-w-md">{t("getStarted")}</p>
         </div>
 
         {/* Decorative circles */}
@@ -78,7 +78,6 @@ export default function RegisterPage() {
             </Link>
           </div>
 
-          <div className="space-y-2">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold text-gray-900">
               {t("createAccount")}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
@@ -56,6 +56,7 @@ export default function DashboardLayout({
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const t = useTranslations("Common");
+  const locale = useLocale();
 
   const navigation = [
     { name: t("dashboard"), href: "/dashboard", icon: LayoutDashboard },
@@ -64,6 +65,14 @@ export default function DashboardLayout({
     { name: t("accounts"), href: "/dashboard/accounts", icon: Users },
     { name: t("analytics"), href: "/dashboard/analytics", icon: BarChart2 },
   ];
+
+  const languages = [
+    { code: "de", label: "Deutsch", flag: "🇩🇪" },
+    { code: "en", label: "English", flag: "🇺🇸" },
+    { code: "tr", label: "Türkçe", flag: "🇹🇷" },
+  ];
+
+  const currentLang = languages.find((l) => l.code === locale) || languages[0];
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -178,7 +187,7 @@ export default function DashboardLayout({
             {/* Language Selector */}
             <div className="relative group z-50">
               <button
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
+                className="w-10 h-10 rounded-full hover:bg-gray-100 transition-all flex items-center justify-center"
                 onClick={() =>
                   setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
                 }
@@ -186,25 +195,33 @@ export default function DashboardLayout({
                   setTimeout(() => setIsLanguageDropdownOpen(false), 200)
                 }
               >
-                <Globe size={20} />
+                <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-200">
+                  <span className="text-2xl leading-none -mt-0.5">
+                    {currentLang.flag}
+                  </span>
+                </div>
               </button>
               {isLanguageDropdownOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 animate-in fade-in zoom-in-95 duration-200">
-                  {[
-                    { code: "de", label: "Deutsch", flag: "🇩🇪" },
-                    { code: "en", label: "English", flag: "🇺🇸" },
-                    { code: "tr", label: "Türkçe", flag: "🇹🇷" },
-                  ].map((lang) => (
+                  {languages.map((lang) => (
                     <button
                       key={lang.code}
                       onClick={() => {
                         document.cookie = `NEXT_LOCALE=${lang.code}; path=/; max-age=31536000`;
-                        window.location.reload();
+                        router.refresh();
+                        setIsLanguageDropdownOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                      className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 transition-colors ${
+                        locale === lang.code
+                          ? "bg-purple-50 text-purple-700 font-medium"
+                          : "text-gray-700 hover:bg-gray-50"
+                      }`}
                     >
                       <span className="text-xl">{lang.flag}</span>
                       <span className="font-medium">{lang.label}</span>
+                      {locale === lang.code && (
+                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-600" />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -215,15 +232,27 @@ export default function DashboardLayout({
 
             {/* User Profile & Logout */}
             <div className="flex items-center gap-3">
-              <div className="hidden md:block text-right">
-                <p className="text-sm font-medium text-gray-900 leading-none">
-                  {user?.name}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">{user?.email}</p>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">
-                {user?.name?.[0] || "U"}
-              </div>
+              {user ? (
+                <>
+                  <div className="hidden md:block text-right">
+                    <p className="text-sm font-medium text-gray-900 leading-none">
+                      {user.name}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">{user.email}</p>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">
+                    {user.name?.[0] || "U"}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="hidden md:block text-right space-y-1">
+                    <div className="h-3 w-24 bg-gray-200 rounded animate-pulse" />
+                    <div className="h-2 w-32 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+                </>
+              )}
               <button
                 onClick={handleLogout}
                 className="p-2 text-gray-400 hover:text-red-500 transition-colors ml-1"
