@@ -25,7 +25,12 @@ type SocialPlatform =
   | "linkedin"
   | "tiktok";
 
+import { useTranslations } from "next-intl";
+
 export default function CreatePostPage() {
+  const t = useTranslations("CreatePost");
+  const commonT = useTranslations("Common");
+
   const [selectedPlatforms, setSelectedPlatforms] = useState<SocialPlatform[]>(
     [],
   );
@@ -107,7 +112,7 @@ export default function CreatePostPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedPlatforms.length === 0) {
-      alert("Please select at least one platform");
+      alert(t("selectPlatformError"));
       return;
     }
 
@@ -115,7 +120,7 @@ export default function CreatePostPage() {
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
-      alert("Post created successfully!");
+      alert(t("success"));
       setContent("");
       setFiles([]);
       setSelectedPlatforms([]);
@@ -125,17 +130,15 @@ export default function CreatePostPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Create New Post</h1>
-        <p className="text-gray-500 mt-1">
-          Share content across multiple platforms simultaneously.
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
+        <p className="text-gray-500 mt-1">{t("subtitle")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Platform Selection */}
         <section className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            1. Select Platforms
+            {t("step1")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {platforms.map((platform) => {
@@ -172,32 +175,34 @@ export default function CreatePostPage() {
           {/* Input Area */}
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
             <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              2. Compose Content
+              {t("step2")}
             </h2>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Message
+                {t("messageLabel")}
               </label>
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={6}
                 className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                placeholder="What's on your mind?"
+                placeholder={t("messagePlaceholder")}
                 required
               />
               <div className="flex justify-between items-center mt-2 text-xs text-gray-400">
-                <span>{content.length} characters</span>
+                <span>
+                  {content.length} {t("characters")}
+                </span>
                 <span className={content.length > 280 ? "text-red-500" : ""}>
-                  {280 - content.length} left (Twitter)
+                  {280 - content.length} {t("left")} (Twitter)
                 </span>
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Media
+                {t("mediaLabel")}
               </label>
 
               <div className="grid grid-cols-3 gap-3 mb-3">
@@ -234,7 +239,7 @@ export default function CreatePostPage() {
 
                 <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-colors text-gray-400 hover:text-purple-500">
                   <Plus size={24} className="mb-1" />
-                  <span className="text-xs font-medium">Add</span>
+                  <span className="text-xs font-medium">{t("add")}</span>
                   <input
                     type="file"
                     className="hidden"
@@ -250,7 +255,7 @@ export default function CreatePostPage() {
           {/* Preview Area (Simulated) */}
           <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              3. Preview
+              {t("step3")}
             </h2>
 
             {selectedPlatforms.length > 0 ? (
@@ -276,13 +281,13 @@ export default function CreatePostPage() {
                 </div>
                 {files.length > 0 && (
                   <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 border border-gray-200">
-                    {files.length} media attached
+                    {files.length} {t("mediaAttached")}
                   </div>
                 )}
               </div>
             ) : (
               <div className="flex-1 flex items-center justify-center text-gray-400 text-sm italic">
-                Select a platform to see preview
+                {t("selectToPreview")}
               </div>
             )}
           </div>
@@ -306,7 +311,7 @@ export default function CreatePostPage() {
             type="button"
             className="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
           >
-            Draft
+            {t("draft")}
           </button>
 
           <button
@@ -315,11 +320,11 @@ export default function CreatePostPage() {
             className="px-8 py-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-70"
           >
             {loading ? (
-              "Posting..."
+              t("posting")
             ) : (
               <>
                 <Send size={18} />
-                {scheduledDate ? "Schedule Post" : "Post Now"}
+                {scheduledDate ? t("schedulePost") : t("postNow")}
               </>
             )}
           </button>

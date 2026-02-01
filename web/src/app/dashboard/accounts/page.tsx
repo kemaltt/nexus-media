@@ -31,7 +31,13 @@ interface Account {
   status: "active" | "expired" | "error";
 }
 
+import { useTranslations, useLocale } from "next-intl";
+
 export default function AccountsPage() {
+  const t = useTranslations("Accounts");
+  const commonT = useTranslations("Common");
+  const locale = useLocale();
+
   const [accounts, setAccounts] = useState<Account[]>([
     {
       id: "1",
@@ -112,7 +118,7 @@ export default function AccountsPage() {
   };
 
   const handleDisconnect = async (accountId: string) => {
-    if (!confirm("Are you sure you want to disconnect this account?")) return;
+    if (!confirm(t("disconnectConfirm"))) return;
 
     // Optimistic update
     setAccounts(accounts.filter((a) => a.id !== accountId));
@@ -128,10 +134,8 @@ export default function AccountsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Connected Accounts</h1>
-        <p className="text-gray-500 mt-1">
-          Manage your social media connections and permissions.
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
+        <p className="text-gray-500 mt-1">{t("subtitle")}</p>
       </div>
 
       {/* Connected Accounts List */}
@@ -158,8 +162,8 @@ export default function AccountsPage() {
                     <span>{account.username}</span>
                     <span className="w-1 h-1 bg-gray-300 rounded-full" />
                     <span>
-                      Connected on{" "}
-                      {new Date(account.connectedAt).toLocaleDateString()}
+                      {t("connectedOn")}{" "}
+                      {new Date(account.connectedAt).toLocaleDateString(locale)}
                     </span>
                   </div>
                 </div>
@@ -168,11 +172,11 @@ export default function AccountsPage() {
               <div className="flex items-center gap-4">
                 {account.status === "active" ? (
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    <CheckCircle size={12} className="mr-1" /> Active
+                    <CheckCircle size={12} className="mr-1" /> {t("active")}
                   </span>
                 ) : (
                   <button className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 hover:bg-yellow-200 transition-colors">
-                    <AlertCircle size={12} className="mr-1" /> Reconnect
+                    <AlertCircle size={12} className="mr-1" /> {t("reconnect")}
                   </button>
                 )}
 
@@ -192,11 +196,9 @@ export default function AccountsPage() {
           <div className="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
             <Users className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-semibold text-gray-900">
-              No accounts connected
+              {t("noAccounts")}
             </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by connecting a social media profile.
-            </p>
+            <p className="mt-1 text-sm text-gray-500">{t("getStarted")}</p>
           </div>
         )}
       </div>
@@ -204,7 +206,7 @@ export default function AccountsPage() {
       {/* Add New Connection Section */}
       <div>
         <h2 className="text-lg font-bold text-gray-900 mb-4 mt-8">
-          Connect New Platform
+          {t("connectNew")}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {(
@@ -244,7 +246,7 @@ export default function AccountsPage() {
                     {name}
                   </span>
                   <span className="text-xs text-gray-500">
-                    {isConnected ? "Already connected" : "Connect now"}
+                    {isConnected ? t("alreadyConnected") : t("connectNow")}
                   </span>
                 </div>
                 {!isConnected && <Plus size={16} className="text-gray-400" />}

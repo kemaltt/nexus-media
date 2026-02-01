@@ -20,8 +20,14 @@ type SettingsTab = "profile" | "security" | "notifications" | "preferences";
 type Theme = "light" | "dark" | "system";
 type Language = "en" | "tr" | "de";
 
+import { useTranslations, useLocale } from "next-intl";
+
 export default function SettingsPage() {
   const router = useRouter();
+  const t = useTranslations("Settings");
+  const commonT = useTranslations("Common");
+  const locale = useLocale();
+
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -32,7 +38,7 @@ export default function SettingsPage() {
     language: Language;
   }>({
     theme: "system",
-    language: "en",
+    language: locale as Language,
   });
 
   // Profile Form State
@@ -75,7 +81,7 @@ export default function SettingsPage() {
         localStorage.setItem("user", JSON.stringify(updatedUser));
       }
 
-      setSuccessMessage("Profile updated successfully!");
+      setSuccessMessage(t("profile.updated"));
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       console.error("Failed to update profile", error);
@@ -111,8 +117,14 @@ export default function SettingsPage() {
     value: Theme | Language,
   ) => {
     setPreferences((prev) => ({ ...prev, [key]: value }));
+
+    if (key === "language") {
+      document.cookie = `NEXT_LOCALE=${value}; path=/; max-age=31536000`;
+      router.refresh();
+    }
+
     // Here act like we saved it
-    setSuccessMessage(`Preferences updated: ${value}`);
+    setSuccessMessage(`${t("preferences.updated") || "Updated"}: ${value}`);
     setTimeout(() => setSuccessMessage(""), 2000);
   };
 
@@ -134,14 +146,14 @@ export default function SettingsPage() {
                 type="button"
                 className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
               >
-                Change Avatar
+                {t("profile.changeAvatar")}
               </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
+                  {t("profile.fullName")}
                 </label>
                 <input
                   type="text"
@@ -154,7 +166,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address
+                  {t("profile.email")}
                 </label>
                 <input
                   type="email"
@@ -171,7 +183,7 @@ export default function SettingsPage() {
                 disabled={loading}
                 className="px-6 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50"
               >
-                {loading ? "Saving..." : "Save Changes"}
+                {loading ? commonT("loading") : t("profile.saveChanges")}
               </button>
             </div>
           </form>
@@ -182,7 +194,7 @@ export default function SettingsPage() {
           <form onSubmit={handlePasswordUpdate} className="space-y-6 max-w-md">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Current Password
+                {t("security.currentPassword") || "Current Password"}
               </label>
               <input
                 type="password"
@@ -196,7 +208,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                New Password
+                {t("security.newPassword") || "New Password"}
               </label>
               <input
                 type="password"
@@ -210,7 +222,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm New Password
+                {t("security.confirmPassword") || "Confirm New Password"}
               </label>
               <input
                 type="password"
@@ -225,7 +237,7 @@ export default function SettingsPage() {
 
             <div className="pt-4 border-t border-gray-200">
               <h3 className="text-sm font-medium text-gray-900 mb-2">
-                Two-Factor Authentication
+                {t("security.twoFactor") || "Two-Factor Authentication"}
               </h3>
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <div className="flex items-center gap-3">
@@ -234,10 +246,11 @@ export default function SettingsPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">
-                      Authenticator App
+                      {t("security.authenticatorApp") || "Authenticator App"}
                     </p>
                     <p className="text-xs text-gray-500">
-                      Secure your account with 2FA
+                      {t("security.secureAccount") ||
+                        "Secure your account with 2FA"}
                     </p>
                   </div>
                 </div>
@@ -245,7 +258,7 @@ export default function SettingsPage() {
                   type="button"
                   className="text-sm font-medium text-purple-600 hover:text-purple-700"
                 >
-                  Enable
+                  {t("security.enable") || "Enable"}
                 </button>
               </div>
             </div>
@@ -256,7 +269,9 @@ export default function SettingsPage() {
                 disabled={loading}
                 className="px-6 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50"
               >
-                {loading ? "Updating..." : "Update Password"}
+                {loading
+                  ? commonT("loading")
+                  : t("security.updatePassword") || "Update Password"}
               </button>
             </div>
           </form>
@@ -268,16 +283,16 @@ export default function SettingsPage() {
             {/* Notification settings placeholder */}
             <div className="p-4 bg-yellow-50 text-yellow-800 rounded-lg border border-yellow-200">
               <p className="text-sm">
-                Notification settings are managed globally. Individual
-                preferences coming soon.
+                {t("notifications.managedGlobally") ||
+                  "Notification settings are managed globally. Individual preferences coming soon."}
               </p>
             </div>
             <div className="space-y-4">
               {[
-                "Email Notifications",
-                "Push Notifications",
-                "Weekly Report",
-                "Security Alerts",
+                t("notifications.email") || "Email Notifications",
+                t("notifications.push") || "Push Notifications",
+                t("notifications.weekly") || "Weekly Report",
+                t("notifications.security") || "Security Alerts",
               ].map((item) => (
                 <div
                   key={item}
@@ -304,7 +319,7 @@ export default function SettingsPage() {
             {/* Language Selection */}
             <section>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Language
+                {t("preferences.language")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[
@@ -314,7 +329,9 @@ export default function SettingsPage() {
                 ].map((lang) => (
                   <button
                     key={lang.id}
-                    onClick={() => handlePreferenceUpdate("language", lang.id)}
+                    onClick={() =>
+                      handlePreferenceUpdate("language", lang.id as Language)
+                    }
                     className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
                       preferences.language === lang.id
                         ? "border-purple-500 bg-purple-50 ring-1 ring-purple-500"
@@ -342,17 +359,23 @@ export default function SettingsPage() {
             {/* Theme Selection */}
             <section>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Appearance
+                {t("preferences.appearance")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[
-                  { id: "light", name: "Light", icon: Sun },
-                  { id: "dark", name: "Dark", icon: Moon },
-                  { id: "system", name: "System", icon: Smartphone },
+                  { id: "light", name: t("preferences.light"), icon: Sun },
+                  { id: "dark", name: t("preferences.dark"), icon: Moon },
+                  {
+                    id: "system",
+                    name: t("preferences.system"),
+                    icon: Smartphone,
+                  },
                 ].map((theme) => (
                   <button
                     key={theme.id}
-                    onClick={() => handlePreferenceUpdate("theme", theme.id)}
+                    onClick={() =>
+                      handlePreferenceUpdate("theme", theme.id as Theme)
+                    }
                     className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all gap-3 ${
                       preferences.theme === theme.id
                         ? "border-purple-500 bg-purple-50 ring-1 ring-purple-500"
@@ -385,20 +408,18 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Account Settings</h1>
-        <p className="text-gray-500 mt-1">
-          Manage your profile, security, and preferences.
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
+        <p className="text-gray-500 mt-1">{t("subtitle")}</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Settings Navigation */}
         <nav className="w-full lg:w-64 space-y-1">
           {[
-            { id: "profile", label: "Profile", icon: User },
-            { id: "security", label: "Security", icon: Lock },
-            { id: "notifications", label: "Notifications", icon: Bell },
-            { id: "preferences", label: "Preferences", icon: Globe },
+            { id: "profile", label: t("tabs.profile"), icon: User },
+            { id: "security", label: t("tabs.security"), icon: Lock },
+            { id: "notifications", label: t("tabs.notifications"), icon: Bell },
+            { id: "preferences", label: t("tabs.preferences"), icon: Globe },
           ].map((item) => (
             <button
               key={item.id}
@@ -423,7 +444,7 @@ export default function SettingsPage() {
               className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
               <LogOut size={18} className="mr-3" />
-              Sign Out
+              {commonT("logout")}
             </button>
           </div>
         </nav>

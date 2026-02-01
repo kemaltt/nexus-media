@@ -48,5 +48,72 @@
       "dark": "Koyu",
       "system": "Sistem"
     }
+  },
+  "Dashboard": {
+    "overview": "Panel Genel Bakış",
+    "downloadReport": "Raporu İndir",
+    "totalFollowers": "Toplam Takipçi",
+    "totalPosts": "Toplam Gönderi",
+    "engagementRate": "Etkileşim Oranı",
+    "growth": "Büyüme",
+    "activityOverview": "Aktivite Özeti",
+    "connectedAccounts": "Bağlı Hesaplar",
+    "addNewAccount": "+ Yeni Hesap Ekle",
+    "connected": "Bağlı",
+    "notLinked": "Bağlı Değil",
+    "vsLastMonth": "geçen aya göre"
+  },
+  "Accounts": {
+    "title": "Bağlı Hesaplar",
+    "subtitle": "Sosyal medya bağlantılarınızı ve izinlerinizi yönetin.",
+    "connectNew": "Yeni Platform Bağla",
+    "active": "Aktif",
+    "reconnect": "Tekrar Bağla",
+    "disconnectConfirm": "Bu hesabın bağlantısını kesmek istediğinize emin misiniz?",
+    "noAccounts": "Bağlı hesap bulunamadı",
+    "getStarted": "Bir sosyal medya profili bağlayerek başlayın.",
+    "alreadyConnected": "Zaten bağlı",
+    "connectNow": "Şimdi bağla",
+    "connectedOn": "Bağlanma tarihi:"
+  },
+  "CreatePost": {
+    "title": "Yeni Gönderi Oluştur",
+    "subtitle": "İçeriğinizi birden fazla platformda aynı anda paylaşın.",
+    "step1": "1. Platformları Seç",
+    "step2": "2. İçerik Oluştur",
+    "step3": "3. Önizleme",
+    "messageLabel": "Mesaj",
+    "messagePlaceholder": "Aklınızdan ne geçiyor?",
+    "mediaLabel": "Medya",
+    "draft": "Taslak",
+    "postNow": "Şimdi Paylaş",
+    "schedulePost": "İleri Tarihli Paylaş",
+    "posting": "Paylaşılıyor...",
+    "success": "Gönderi başarıyla oluşturuldu!",
+    "selectPlatformError": "Lütfen en az bir platform seçin",
+    "add": "Ekle",
+    "characters": "karakter",
+    "left": "kaldı",
+    "mediaAttached": "medya eklendi",
+    "selectToPreview": "Önizleme görmek için platform seçin"
+  },
+  "History": {
+    "title": "Gönderi Geçmişi",
+    "subtitle": "Geçmiş ve planlanmış gönderilerinizi görüntüleyin ve yönetin.",
+    "searchPlaceholder": "İçerik ara...",
+    "status": {
+      "all": "Tümü",
+      "published": "Yayınlandı",
+      "scheduled": "Planlandı",
+      "failed": "Başarısız"
+    },
+    "table": {
+      "content": "İçerik",
+      "platforms": "Platformlar",
+      "date": "Tarih",
+      "status": "Durum"
+    },
+    "noPosts": "Kriterlerinize uygun gönderi bulunamadı.",
+    "mediaAttachment": "medya eki"
   }
 }

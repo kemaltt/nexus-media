@@ -38,31 +38,36 @@ const data = [
   { name: "Sun", posts: 8 },
 ];
 
+import { useTranslations } from "next-intl";
+
 export default function DashboardPage() {
+  const t = useTranslations("Dashboard");
+  const commonT = useTranslations("Common");
+
   const stats = [
     {
-      name: "Total Followers",
+      name: t("totalFollowers"),
       value: "12,345",
       change: "+12%",
       icon: Users,
       color: "bg-purple-500",
     },
     {
-      name: "Total Posts",
+      name: t("totalPosts"),
       value: "1,234",
       change: "+5%",
       icon: Share2,
       color: "bg-pink-500",
     },
     {
-      name: "Engagement Rate",
+      name: t("engagementRate"),
       value: "5.4%",
       change: "+2.1%",
       icon: Activity,
       color: "bg-orange-500",
     },
     {
-      name: "Growth",
+      name: t("growth"),
       value: "+450",
       change: "+18%",
       icon: TrendingUp,
@@ -70,12 +75,39 @@ export default function DashboardPage() {
     },
   ];
 
+  const accounts = [
+    {
+      name: "YouTube",
+      icon: Youtube,
+      connected: true,
+      color: "text-red-600",
+    },
+    {
+      name: "Instagram",
+      icon: Instagram,
+      connected: true,
+      color: "text-pink-600",
+    },
+    {
+      name: "Facebook",
+      icon: Facebook,
+      connected: false,
+      color: "text-blue-600",
+    },
+    {
+      name: "Twitter / X",
+      icon: Twitter,
+      connected: false,
+      color: "text-gray-900",
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t("overview")}</h1>
         <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-          Download Report
+          {t("downloadReport")}
         </button>
       </div>
 
@@ -103,7 +135,7 @@ export default function DashboardPage() {
             <div className="mt-4 flex items-center text-sm">
               <ArrowUpRight size={16} className="text-green-500 mr-1" />
               <span className="text-green-500 font-medium">{stat.change}</span>
-              <span className="text-gray-400 ml-2">vs last month</span>
+              <span className="text-gray-400 ml-2">{t("vsLastMonth")}</span>
             </div>
           </div>
         ))}
@@ -114,7 +146,7 @@ export default function DashboardPage() {
         {/* Activity Chart Section */}
         <div className="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
           <h2 className="text-lg font-bold text-gray-900 mb-6">
-            Activity Overview
+            {t("activityOverview")}
           </h2>
           <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -140,35 +172,10 @@ export default function DashboardPage() {
         <div className="space-y-6">
           <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             <h2 className="text-lg font-bold text-gray-900 mb-4">
-              Connected Accounts
+              {t("connectedAccounts")}
             </h2>
             <div className="space-y-4">
-              {[
-                {
-                  name: "YouTube",
-                  icon: Youtube,
-                  connected: true,
-                  color: "text-red-600",
-                },
-                {
-                  name: "Instagram",
-                  icon: Instagram,
-                  connected: true,
-                  color: "text-pink-600",
-                },
-                {
-                  name: "Facebook",
-                  icon: Facebook,
-                  connected: false,
-                  color: "text-blue-600",
-                },
-                {
-                  name: "Twitter / X",
-                  icon: Twitter,
-                  connected: false,
-                  color: "text-gray-900",
-                },
-              ].map((account) => (
+              {accounts.map((account) => (
                 <div
                   key={account.name}
                   className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
@@ -186,13 +193,13 @@ export default function DashboardPage() {
                         : "bg-gray-100 text-gray-500"
                     }`}
                   >
-                    {account.connected ? "Connected" : "Not Linked"}
+                    {account.connected ? t("connected") : t("notLinked")}
                   </span>
                 </div>
               ))}
             </div>
             <button className="w-full mt-4 py-2 border border-dashed border-gray-300 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 hover:border-gray-400 transition-colors">
-              + Add New Account
+              {t("addNewAccount")}
             </button>
           </div>
         </div>

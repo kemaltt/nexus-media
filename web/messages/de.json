@@ -48,5 +48,72 @@
       "dark": "Dunkel",
       "system": "System"
     }
+  },
+  "Dashboard": {
+    "overview": "Dashboard Übersicht",
+    "downloadReport": "Bericht herunterladen",
+    "totalFollowers": "Follower gesamt",
+    "totalPosts": "Beiträge gesamt",
+    "engagementRate": "Engagement-Rate",
+    "growth": "Wachstum",
+    "activityOverview": "Aktivitätsübersicht",
+    "connectedAccounts": "Verbundene Konten",
+    "addNewAccount": "+ Neues Konto hinzufügen",
+    "connected": "Verbunden",
+    "notLinked": "Nicht verknüpft",
+    "vsLastMonth": "vs. Vormonat"
+  },
+  "Accounts": {
+    "title": "Verbundene Konten",
+    "subtitle": "Verwalten Sie Ihre Social-Media-Verbindungen und Berechtigungen.",
+    "connectNew": "Neue Plattform verbinden",
+    "active": "Aktiv",
+    "reconnect": "Erneut verbinden",
+    "disconnectConfirm": "Möchten Sie dieses Konto wirklich trennen?",
+    "noAccounts": "Keine Konten verbunden",
+    "getStarted": "Beginnen Sie, indem Sie ein Social-Media-Profil verbinden.",
+    "alreadyConnected": "Bereits verbunden",
+    "connectNow": "Jetzt verbinden",
+    "connectedOn": "Verbunden am"
+  },
+  "CreatePost": {
+    "title": "Neuen Beitrag erstellen",
+    "subtitle": "Teilen Sie Inhalte gleichzeitig auf mehreren Plattformen.",
+    "step1": "1. Plattformen auswählen",
+    "step2": "2. Inhalt verfassen",
+    "step3": "3. Vorschau",
+    "messageLabel": "Nachricht",
+    "messagePlaceholder": "Was gibt's Neues?",
+    "mediaLabel": "Medien",
+    "draft": "Entwurf",
+    "postNow": "Jetzt posten",
+    "schedulePost": "Beitrag planen",
+    "posting": "Wird gepostet...",
+    "success": "Beitrag erfolgreich erstellt!",
+    "selectPlatformError": "Bitte wählen Sie mindestens eine Plattform aus",
+    "add": "Hinzufügen",
+    "characters": "Zeichen",
+    "left": "übrig",
+    "mediaAttached": "Medien angehängt",
+    "selectToPreview": "Wählen Sie eine Plattform für die Vorschau"
+  },
+  "History": {
+    "title": "Beitragsverlauf",
+    "subtitle": "Zeigen Sie Ihre vergangenen und geplanten Beiträge an und verwalten Sie sie.",
+    "searchPlaceholder": "Inhalt suchen...",
+    "status": {
+      "all": "Alle",
+      "published": "Veröffentlicht",
+      "scheduled": "Geplant",
+      "failed": "Fehlgeschlagen"
+    },
+    "table": {
+      "content": "Inhalt",
+      "platforms": "Plattformen",
+      "date": "Datum",
+      "status": "Status"
+    },
+    "noPosts": "Keine Beiträge gefunden.",
+    "mediaAttachment": "Medienanhang"
   }
 }

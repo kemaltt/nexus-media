@@ -34,7 +34,13 @@ interface Post {
   mediaCount: number;
 }
 
+import { useTranslations, useLocale } from "next-intl";
+
 export default function HistoryPage() {
+  const t = useTranslations("History");
+  const commonT = useTranslations("Common");
+  const locale = useLocale();
+
   const [filterStatus, setFilterStatus] = useState<PostStatus | "all">("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -79,19 +85,19 @@ export default function HistoryPage() {
       case "published":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            <CheckCircle size={12} className="mr-1" /> Published
+            <CheckCircle size={12} className="mr-1" /> {t("status.published")}
           </span>
         );
       case "scheduled":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-            <Clock size={12} className="mr-1" /> Scheduled
+            <Clock size={12} className="mr-1" /> {t("status.scheduled")}
           </span>
         );
       case "failed":
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-            <XCircle size={12} className="mr-1" /> Failed
+            <XCircle size={12} className="mr-1" /> {t("status.failed")}
           </span>
         );
     }
@@ -128,10 +134,8 @@ export default function HistoryPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Post History</h1>
-        <p className="text-gray-500 mt-1">
-          View and manage your past and scheduled posts.
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
+        <p className="text-gray-500 mt-1">{t("subtitle")}</p>
       </div>
 
       {/* Filters and Search */}
@@ -143,7 +147,7 @@ export default function HistoryPage() {
           />
           <input
             type="text"
-            placeholder="Search content..."
+            placeholder={t("searchPlaceholder")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -163,7 +167,7 @@ export default function HistoryPage() {
                     : "bg-gray-50 text-gray-600 hover:bg-gray-100"
                 }`}
               >
-                {status}
+                {t(`status.${status}`)}
               </button>
             ),
           )}
@@ -180,25 +184,25 @@ export default function HistoryPage() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Content
+                  {t("table.content")}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Platforms
+                  {t("table.platforms")}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Date
+                  {t("table.date")}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Status
+                  {t("table.status")}
                 </th>
                 <th scope="col" className="relative px-6 py-3">
                   <span className="sr-only">Actions</span>
@@ -222,8 +226,8 @@ export default function HistoryPage() {
                     </div>
                     {post.mediaCount > 0 && (
                       <div className="text-xs text-gray-500 mt-1">
-                        +{post.mediaCount} media attachment
-                        {post.mediaCount > 1 ? "s" : ""}
+                        +{post.mediaCount} {t("mediaAttachment")}
+                        {post.mediaCount > 1 && locale === "en" ? "s" : ""}
                       </div>
                     )}
                   </td>
@@ -241,9 +245,9 @@ export default function HistoryPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(post.publishDate).toLocaleDateString()}
+                    {new Date(post.publishDate).toLocaleDateString(locale)}
                     <span className="block text-xs">
-                      {new Date(post.publishDate).toLocaleTimeString([], {
+                      {new Date(post.publishDate).toLocaleTimeString(locale, {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
@@ -265,9 +269,7 @@ export default function HistoryPage() {
 
         {filteredPosts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-sm">
-              No posts found matching your criteria.
-            </p>
+            <p className="text-gray-500 text-sm">{t("noPosts")}</p>
           </div>
         )}
       </div>

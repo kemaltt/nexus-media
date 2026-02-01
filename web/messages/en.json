@@ -48,5 +48,72 @@
       "dark": "Dark",
       "system": "System"
     }
+  },
+  "Dashboard": {
+    "overview": "Dashboard Overview",
+    "downloadReport": "Download Report",
+    "totalFollowers": "Total Followers",
+    "totalPosts": "Total Posts",
+    "engagementRate": "Engagement Rate",
+    "growth": "Growth",
+    "activityOverview": "Activity Overview",
+    "connectedAccounts": "Connected Accounts",
+    "addNewAccount": "+ Add New Account",
+    "connected": "Connected",
+    "notLinked": "Not Linked",
+    "vsLastMonth": "vs last month"
+  },
+  "Accounts": {
+    "title": "Connected Accounts",
+    "subtitle": "Manage your social media connections and permissions.",
+    "connectNew": "Connect New Platform",
+    "active": "Active",
+    "reconnect": "Reconnect",
+    "disconnectConfirm": "Are you sure you want to disconnect this account?",
+    "noAccounts": "No accounts connected",
+    "getStarted": "Get started by connecting a social media profile.",
+    "alreadyConnected": "Already connected",
+    "connectNow": "Connect now",
+    "connectedOn": "Connected on"
+  },
+  "CreatePost": {
+    "title": "Create New Post",
+    "subtitle": "Share content across multiple platforms simultaneously.",
+    "step1": "1. Select Platforms",
+    "step2": "2. Compose Content",
+    "step3": "3. Preview",
+    "messageLabel": "Message",
+    "messagePlaceholder": "What's on your mind?",
+    "mediaLabel": "Media",
+    "draft": "Draft",
+    "postNow": "Post Now",
+    "schedulePost": "Schedule Post",
+    "posting": "Posting...",
+    "success": "Post created successfully!",
+    "selectPlatformError": "Please select at least one platform",
+    "add": "Add",
+    "characters": "characters",
+    "left": "left",
+    "mediaAttached": "media attached",
+    "selectToPreview": "Select a platform to see preview"
+  },
+  "History": {
+    "title": "Post History",
+    "subtitle": "View and manage your past and scheduled posts.",
+    "searchPlaceholder": "Search content...",
+    "status": {
+      "all": "All",
+      "published": "Published",
+      "scheduled": "Scheduled",
+      "failed": "Failed"
+    },
+    "table": {
+      "content": "Content",
+      "platforms": "Platforms",
+      "date": "Date",
+      "status": "Status"
+    },
+    "noPosts": "No posts found matching your criteria.",
+    "mediaAttachment": "media attachment"
   }
 }
