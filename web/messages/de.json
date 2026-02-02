@@ -9,7 +9,12 @@
     "logout": "Abmelden",
     "loading": "Laden...",
     "save": "Speichern",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "theme": {
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System"
+    }
   },
   "Auth": {
     "welcomeBack": "Willkommen zurück",
@@ -43,10 +48,7 @@
     },
     "preferences": {
       "language": "Sprache",
-      "appearance": "Erscheinungsbild",
-      "light": "Hell",
-      "dark": "Dunkel",
-      "system": "System"
+      "appearance": "Erscheinungsbild"
     }
   },
   "Dashboard": {

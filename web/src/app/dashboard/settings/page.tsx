@@ -10,7 +10,7 @@ import {
   Globe,
   Moon,
   Sun,
-  Smartphone,
+  Laptop,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
@@ -20,6 +20,7 @@ type SettingsTab = "profile" | "security" | "notifications" | "preferences";
 type Theme = "light" | "dark" | "system";
 type Language = "en" | "tr" | "de";
 
+import { useTheme } from "next-themes";
 import { useTranslations, useLocale } from "next-intl";
 
 export default function SettingsPage() {
@@ -27,6 +28,7 @@ export default function SettingsPage() {
   const t = useTranslations("Settings");
   const commonT = useTranslations("Common");
   const locale = useLocale();
+  const { theme, setTheme } = useTheme();
 
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
   const [loading, setLoading] = useState(false);
@@ -37,9 +39,16 @@ export default function SettingsPage() {
     theme: Theme;
     language: Language;
   }>({
-    theme: "system",
+    theme: (theme as Theme) || "system",
     language: locale as Language,
   });
+
+  // Keep internal state in sync with global theme
+  useEffect(() => {
+    if (theme) {
+      setPreferences((prev) => ({ ...prev, theme: theme as Theme }));
+    }
+  }, [theme]);
 
   // Profile Form State
   const [profile, setProfile] = useState({
@@ -121,6 +130,8 @@ export default function SettingsPage() {
     if (key === "language") {
       document.cookie = `NEXT_LOCALE=${value}; path=/; max-age=31536000`;
       router.refresh();
+    } else if (key === "theme") {
+      setTheme(value);
     }
 
     // Here act like we saved it
@@ -152,7 +163,7 @@ export default function SettingsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {t("profile.fullName")}
                 </label>
                 <input
@@ -161,18 +172,18 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setProfile({ ...profile, fullName: e.target.value })
                   }
-                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   {t("profile.email")}
                 </label>
                 <input
                   type="email"
                   value={profile.email}
                   disabled
-                  className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-500 cursor-not-allowed"
+                  className="w-full px-4 py-2 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-gray-500 dark:text-gray-400 cursor-not-allowed"
                 />
               </div>
             </div>
@@ -318,7 +329,7 @@ export default function SettingsPage() {
           <div className="space-y-8 max-w-2xl">
             {/* Language Selection */}
             <section>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 {t("preferences.language")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -334,67 +345,78 @@ export default function SettingsPage() {
                     }
                     className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
                       preferences.language === lang.id
-                        ? "border-purple-500 bg-purple-50 ring-1 ring-purple-500"
-                        : "border-gray-200 bg-white hover:border-purple-200 hover:bg-gray-50"
+                        ? "border-purple-500 bg-purple-50 dark:bg-purple-600/20 ring-1 ring-purple-500"
+                        : "border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 hover:border-purple-200 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-white/10"
                     }`}
                   >
                     <span className="flex items-center gap-3">
                       <span className="text-2xl">{lang.flag}</span>
                       <span
-                        className={`font-medium ${preferences.language === lang.id ? "text-purple-700" : "text-gray-700"}`}
+                        className={`font-medium ${
+                          preferences.language === lang.id
+                            ? "text-purple-700 dark:text-purple-400"
+                            : "text-gray-700 dark:text-gray-300"
+                        }`}
                       >
                         {lang.name}
                       </span>
                     </span>
                     {preferences.language === lang.id && (
-                      <CheckCircle size={18} className="text-purple-600" />
+                      <CheckCircle
+                        size={18}
+                        className="text-purple-600 dark:text-purple-400"
+                      />
                     )}
                   </button>
                 ))}
               </div>
             </section>
 
-            <hr className="border-gray-100" />
+            <hr className="border-gray-100 dark:border-white/10" />
 
             {/* Theme Selection */}
             <section>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 {t("preferences.appearance")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[
-                  { id: "light", name: t("preferences.light"), icon: Sun },
-                  { id: "dark", name: t("preferences.dark"), icon: Moon },
+                  { id: "light", name: commonT("theme.light"), icon: Sun },
+                  { id: "dark", name: commonT("theme.dark"), icon: Moon },
                   {
                     id: "system",
-                    name: t("preferences.system"),
-                    icon: Smartphone,
+                    name: commonT("theme.system"),
+                    icon: Laptop,
                   },
-                ].map((theme) => (
+                ].map((themeItem) => (
                   <button
-                    key={theme.id}
+                    key={themeItem.id}
                     onClick={() =>
-                      handlePreferenceUpdate("theme", theme.id as Theme)
+                      handlePreferenceUpdate("theme", themeItem.id as Theme)
                     }
                     className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all gap-3 ${
-                      preferences.theme === theme.id
-                        ? "border-purple-500 bg-purple-50 ring-1 ring-purple-500"
-                        : "border-gray-200 bg-white hover:border-purple-200 hover:bg-gray-50"
+                      preferences.theme === themeItem.id
+                        ? "border-purple-500 bg-purple-50 dark:bg-purple-600/20 ring-1 ring-purple-500"
+                        : "border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 hover:border-purple-200 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-white/10"
                     }`}
                   >
                     <div
                       className={`p-2 rounded-full ${
-                        preferences.theme === theme.id
-                          ? "bg-white text-purple-600"
-                          : "bg-gray-100 text-gray-500"
+                        preferences.theme === themeItem.id
+                          ? "bg-white dark:bg-purple-500 text-purple-600 dark:text-white"
+                          : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400"
                       }`}
                     >
-                      <theme.icon size={24} />
+                      <themeItem.icon size={24} />
                     </div>
                     <span
-                      className={`font-medium ${preferences.theme === theme.id ? "text-purple-700" : "text-gray-700"}`}
+                      className={`font-medium ${
+                        preferences.theme === themeItem.id
+                          ? "text-purple-700 dark:text-purple-400"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
                     >
-                      {theme.name}
+                      {themeItem.name}
                     </span>
                   </button>
                 ))}
@@ -408,8 +430,10 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
-        <p className="text-gray-500 mt-1">{t("subtitle")}</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {t("title")}
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{t("subtitle")}</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
@@ -426,22 +450,22 @@ export default function SettingsPage() {
               onClick={() => setActiveTab(item.id as SettingsTab)}
               className={`w-full flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                 activeTab === item.id
-                  ? "bg-purple-50 text-purple-700"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-purple-50 dark:bg-purple-600/20 text-purple-700 dark:text-purple-400"
+                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white"
               }`}
             >
               <item.icon
                 size={18}
-                className={`mr-3 ${activeTab === item.id ? "text-purple-600" : "text-gray-400"}`}
+                className={`mr-3 ${activeTab === item.id ? "text-purple-600" : "text-gray-400 dark:text-gray-500"}`}
               />
               {item.label}
             </button>
           ))}
 
-          <div className="pt-4 mt-4 border-t border-gray-200">
+          <div className="pt-4 mt-4 border-t border-gray-200 dark:border-white/10">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
             >
               <LogOut size={18} className="mr-3" />
               {commonT("logout")}
@@ -450,9 +474,9 @@ export default function SettingsPage() {
         </nav>
 
         {/* Content Area */}
-        <div className="flex-1 bg-white p-8 rounded-xl border border-gray-200 shadow-sm min-h-[500px]">
+        <div className="flex-1 bg-white dark:bg-[#171021] p-8 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm min-h-[500px]">
           {successMessage && (
-            <div className="mb-6 p-4 bg-green-50 text-green-700 rounded-lg border border-green-200 flex items-center">
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/10 text-green-700 dark:text-green-400 rounded-lg border border-green-200 dark:border-green-800 flex items-center">
               <CheckCircle size={18} className="mr-2" />
               {successMessage}
             </div>

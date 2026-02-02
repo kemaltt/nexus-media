@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   Users,
   Share2,
@@ -41,6 +42,11 @@ const data = [
 import { useTranslations } from "next-intl";
 
 export default function DashboardPage() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const t = useTranslations("Dashboard");
   const commonT = useTranslations("Common");
 
@@ -105,7 +111,9 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">{t("overview")}</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {t("overview")}
+        </h1>
         <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
           {t("downloadReport")}
         </button>
@@ -116,7 +124,7 @@ export default function DashboardPage() {
         {stats.map((stat) => (
           <div
             key={stat.name}
-            className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-[#171021] p-6 rounded-xl border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -135,7 +143,9 @@ export default function DashboardPage() {
             <div className="mt-4 flex items-center text-sm">
               <ArrowUpRight size={16} className="text-green-500 mr-1" />
               <span className="text-green-500 font-medium">{stat.change}</span>
-              <span className="text-gray-400 ml-2">{t("vsLastMonth")}</span>
+              <span className="text-gray-400 dark:text-gray-500 ml-2">
+                {t("vsLastMonth")}
+              </span>
             </div>
           </div>
         ))}
@@ -144,53 +154,74 @@ export default function DashboardPage() {
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Activity Chart Section */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">
+        <div className="lg:col-span-2 bg-white dark:bg-[#171021] p-6 rounded-xl border border-gray-100 dark:border-white/10 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6">
             {t("activityOverview")}
           </h2>
           <div className="h-80 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} />
-                <Tooltip
-                  cursor={{ fill: "rgba(126, 34, 206, 0.1)" }}
-                  contentStyle={{
-                    borderRadius: "8px",
-                    border: "none",
-                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                  }}
-                />
-                <Bar dataKey="posts" fill="#9333ea" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {mounted ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="#E5E7EB"
+                    opacity={0.1}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#9CA3AF" }}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#9CA3AF" }}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "rgba(126, 34, 206, 0.1)" }}
+                    contentStyle={{
+                      backgroundColor: "var(--tw-dark-bg, #ffffff)",
+                      borderRadius: "8px",
+                      border: "none",
+                      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                    }}
+                  />
+                  <Bar dataKey="posts" fill="#9333ea" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="w-full h-full bg-gray-50 dark:bg-white/5 rounded-lg animate-pulse flex items-center justify-center text-gray-400">
+                {commonT("loading")}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Connected Accounts / Recent Activity */}
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <div className="bg-white dark:bg-[#171021] p-6 rounded-xl border border-gray-100 dark:border-white/10 shadow-sm">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
               {t("connectedAccounts")}
             </h2>
             <div className="space-y-4">
               {accounts.map((account) => (
                 <div
                   key={account.name}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
                     <account.icon className={account.color} size={20} />
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
                       {account.name}
                     </span>
                   </div>
                   <span
                     className={`text-xs px-2 py-1 rounded-full ${
                       account.connected
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-500"
+                        ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400"
+                        : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-500"
                     }`}
                   >
                     {account.connected ? t("connected") : t("notLinked")}
@@ -198,7 +229,7 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-            <button className="w-full mt-4 py-2 border border-dashed border-gray-300 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 hover:border-gray-400 transition-colors">
+            <button className="w-full mt-4 py-2 border border-dashed border-gray-300 dark:border-white/10 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white hover:border-gray-400 transition-colors">
               {t("addNewAccount")}
             </button>
           </div>

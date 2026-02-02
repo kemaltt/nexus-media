@@ -9,7 +9,12 @@
     "logout": "Çıkış Yap",
     "loading": "Yükleniyor...",
     "save": "Kaydet",
-    "cancel": "İptal"
+    "cancel": "İptal",
+    "theme": {
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem"
+    }
   },
   "Auth": {
     "welcomeBack": "Tekrar Hoşgeldiniz",
@@ -43,10 +48,7 @@
     },
     "preferences": {
       "language": "Dil",
-      "appearance": "Görünüm",
-      "light": "Açık",
-      "dark": "Koyu",
-      "system": "Sistem"
+      "appearance": "Görünüm"
     }
   },
   "Dashboard": {

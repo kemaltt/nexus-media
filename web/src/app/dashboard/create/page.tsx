@@ -130,14 +130,16 @@ export default function CreatePostPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
-        <p className="text-gray-500 mt-1">{t("subtitle")}</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {t("title")}
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{t("subtitle")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Platform Selection */}
-        <section className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <section className="bg-white dark:bg-[#171021] p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             {t("step1")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -150,17 +152,17 @@ export default function CreatePostPage() {
                   onClick={() => togglePlatform(platform.id)}
                   className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
                     isSelected
-                      ? "border-purple-500 bg-purple-50"
-                      : "border-transparent bg-gray-50 hover:bg-gray-100"
+                      ? "border-purple-500 bg-purple-50 dark:bg-purple-600/20"
+                      : "border-transparent bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10"
                   }`}
                 >
                   <div
-                    className={`p-2 rounded-full mb-2 ${isSelected ? "bg-white" : platform.bg}`}
+                    className={`p-2 rounded-full mb-2 ${isSelected ? "bg-white dark:bg-purple-500" : platform.bg.includes("-50") ? platform.bg + " dark:" + platform.bg.replace("-50", "-900/20") : platform.bg}`}
                   >
                     <platform.icon className={platform.color} size={24} />
                   </div>
                   <span
-                    className={`text-sm font-medium ${isSelected ? "text-purple-700" : "text-gray-600"}`}
+                    className={`text-sm font-medium ${isSelected ? "text-purple-700 dark:text-purple-400" : "text-gray-600 dark:text-gray-400"}`}
                   >
                     {platform.name}
                   </span>
@@ -173,20 +175,20 @@ export default function CreatePostPage() {
         {/* Content Creation */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Input Area */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          <div className="bg-white dark:bg-[#171021] p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               {t("step2")}
             </h2>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {t("messageLabel")}
               </label>
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={6}
-                className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                className="w-full p-4 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none text-gray-900 dark:text-white placeholder-gray-400"
                 placeholder={t("messagePlaceholder")}
                 required
               />
@@ -201,7 +203,7 @@ export default function CreatePostPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t("mediaLabel")}
               </label>
 
@@ -209,7 +211,7 @@ export default function CreatePostPage() {
                 {files.map((file, index) => (
                   <div
                     key={index}
-                    className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200"
+                    className="relative aspect-square bg-gray-100 dark:bg-white/5 rounded-lg overflow-hidden border border-gray-200 dark:border-white/10"
                   >
                     {/* Placeholder for preview logic - simple representation */}
                     <div className="absolute inset-0 flex items-center justify-center text-gray-400">
@@ -237,7 +239,7 @@ export default function CreatePostPage() {
                   </div>
                 ))}
 
-                <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-colors text-gray-400 hover:text-purple-500">
+                <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-white/10 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-colors text-gray-400 hover:text-purple-500">
                   <Plus size={24} className="mb-1" />
                   <span className="text-xs font-medium">{t("add")}</span>
                   <input
@@ -253,34 +255,34 @@ export default function CreatePostPage() {
           </div>
 
           {/* Preview Area (Simulated) */}
-          <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-gray-50 dark:bg-[#1f1a29] p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm flex flex-col">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               {t("step3")}
             </h2>
 
             {selectedPlatforms.length > 0 ? (
-              <div className="flex-1 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+              <div className="flex-1 bg-white dark:bg-[#171021] border border-gray-200 dark:border-white/10 rounded-xl p-4 shadow-sm">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-200" />
+                  <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-white/10" />
                   <div>
-                    <div className="h-4 w-32 bg-gray-200 rounded mb-1" />
-                    <div className="h-3 w-20 bg-gray-100 rounded" />
+                    <div className="h-4 w-32 bg-gray-200 dark:bg-white/10 rounded mb-1" />
+                    <div className="h-3 w-20 bg-gray-100 dark:bg-white/5 rounded" />
                   </div>
                 </div>
                 <div className="space-y-2 mb-4">
                   {content ? (
-                    <p className="text-gray-800 whitespace-pre-wrap">
+                    <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
                       {content}
                     </p>
                   ) : (
                     <div className="space-y-2">
-                      <div className="h-4 w-full bg-gray-100 rounded" />
-                      <div className="h-4 w-3/4 bg-gray-100 rounded" />
+                      <div className="h-4 w-full bg-gray-100 dark:bg-white/5 rounded" />
+                      <div className="h-4 w-3/4 bg-gray-100 dark:bg-white/5 rounded" />
                     </div>
                   )}
                 </div>
                 {files.length > 0 && (
-                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 border border-gray-200">
+                  <div className="aspect-video bg-gray-100 dark:bg-white/5 rounded-lg flex items-center justify-center text-gray-400 border border-gray-200 dark:border-white/10">
                     {files.length} {t("mediaAttached")}
                   </div>
                 )}
@@ -294,22 +296,22 @@ export default function CreatePostPage() {
         </section>
 
         {/* Actions */}
-        <section className="flex items-center gap-4 pt-4 border-t border-gray-200">
+        <section className="flex items-center gap-4 pt-4 border-t border-gray-200 dark:border-white/10">
           <div className="flex-1">
-            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
               <Calendar size={18} />
               <input
                 type="datetime-local"
                 value={scheduledDate}
                 onChange={(e) => setScheduledDate(e.target.value)}
-                className="bg-transparent border-none focus:ring-0 p-0 text-gray-600"
+                className="bg-transparent border-none focus:ring-0 p-0 text-gray-600 dark:text-gray-400"
               />
             </label>
           </div>
 
           <button
             type="button"
-            className="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+            className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-white/10 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
           >
             {t("draft")}
           </button>

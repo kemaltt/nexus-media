@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import {
   LayoutDashboard,
   Users,
@@ -17,6 +18,9 @@ import {
   Send,
   Clock,
   Globe,
+  Sun,
+  Moon,
+  Laptop,
 } from "lucide-react";
 
 export default function DashboardLayout({
@@ -26,6 +30,14 @@ export default function DashboardLayout({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<{ name: string; email: string } | null>(
@@ -74,13 +86,19 @@ export default function DashboardLayout({
 
   const currentLang = languages.find((l) => l.code === locale) || languages[0];
 
+  const themes = [
+    { id: "light", label: t("theme.light"), icon: Sun },
+    { id: "dark", label: t("theme.dark"), icon: Moon },
+    { id: "system", label: t("theme.system"), icon: Laptop },
+  ];
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     router.push("/login");
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0f0a19] flex transition-colors duration-300">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div
@@ -157,9 +175,9 @@ export default function DashboardLayout({
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8">
+        <header className="h-16 bg-white dark:bg-[#171021] border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-4 lg:px-8 transition-colors duration-300">
           <button
-            className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+            className="lg:hidden p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg"
             onClick={toggleSidebar}
           >
             <Menu size={20} />
@@ -174,20 +192,66 @@ export default function DashboardLayout({
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-400"
               />
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
+            <button className="relative p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
               <Bell size={20} />
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full" />
             </button>
+
+            {/* Theme Selector */}
+            <div className="relative z-50">
+              <button
+                className="w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-all flex items-center justify-center text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+                onClick={() => setIsThemeDropdownOpen(!isThemeDropdownOpen)}
+                onBlur={() =>
+                  setTimeout(() => setIsThemeDropdownOpen(false), 200)
+                }
+              >
+                {mounted ? (
+                  resolvedTheme === "dark" ? (
+                    <Moon size={20} />
+                  ) : (
+                    <Sun size={20} />
+                  )
+                ) : (
+                  <Sun size={20} />
+                )}
+              </button>
+              {isThemeDropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-40 bg-white dark:bg-[#1f162d] rounded-xl shadow-lg border border-gray-100 dark:border-white/10 py-1 animate-in fade-in zoom-in-95 duration-200">
+                  {themes.map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => {
+                        setTheme(t.id);
+                        setIsThemeDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 transition-colors ${
+                        theme === t.id
+                          ? "bg-purple-50 dark:bg-purple-600/20 text-purple-700 dark:text-purple-400 font-medium"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5"
+                      }`}
+                    >
+                      <t.icon size={16} />
+                      <span className="font-medium">{t.label}</span>
+                      {theme === t.id && (
+                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-600" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Language Selector */}
             <div className="relative group z-50">
               <button
-                className="w-10 h-10 rounded-full hover:bg-gray-100 transition-all flex items-center justify-center"
+                className="w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-all flex items-center justify-center"
                 onClick={() =>
                   setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
                 }
@@ -195,14 +259,14 @@ export default function DashboardLayout({
                   setTimeout(() => setIsLanguageDropdownOpen(false), 200)
                 }
               >
-                <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-200">
+                <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
                   <span className="text-2xl leading-none -mt-0.5">
                     {currentLang.flag}
                   </span>
                 </div>
               </button>
               {isLanguageDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 animate-in fade-in zoom-in-95 duration-200">
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-[#1f162d] rounded-xl shadow-lg border border-gray-100 dark:border-white/10 py-1 animate-in fade-in zoom-in-95 duration-200">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
@@ -213,8 +277,8 @@ export default function DashboardLayout({
                       }}
                       className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 transition-colors ${
                         locale === lang.code
-                          ? "bg-purple-50 text-purple-700 font-medium"
-                          : "text-gray-700 hover:bg-gray-50"
+                          ? "bg-purple-50 dark:bg-purple-600/20 text-purple-700 dark:text-purple-400 font-medium"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5"
                       }`}
                     >
                       <span className="text-xl">{lang.flag}</span>
@@ -228,7 +292,7 @@ export default function DashboardLayout({
               )}
             </div>
 
-            <div className="h-8 w-px bg-gray-200 mx-2" />
+            <div className="h-8 w-px bg-gray-200 dark:bg-white/10 mx-2" />
 
             {/* User Profile & Logout */}
             <div className="flex items-center gap-3">

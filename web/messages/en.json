@@ -9,7 +9,12 @@
     "logout": "Sign Out",
     "loading": "Loading...",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
   },
   "Auth": {
     "welcomeBack": "Welcome back",
@@ -43,10 +48,7 @@
     },
     "preferences": {
       "language": "Language",
-      "appearance": "Appearance",
-      "light": "Light",
-      "dark": "Dark",
-      "system": "System"
+      "appearance": "Appearance"
     }
   },
   "Dashboard": {
