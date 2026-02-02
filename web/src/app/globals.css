@@ -24,14 +24,23 @@
   --surface: var(--surface-dark);
   --card: var(--card-dark);
   --border: var(--border-dark);
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+}
+
+.dark {
+  --background: var(--background-dark);
+  --surface: var(--surface-dark);
+  --card: var(--card-dark);
+  --border: var(--border-dark);
   --text-primary: var(--text-primary-dark);
   --text-secondary: var(--text-secondary-dark);
 }
 
 @layer base {
   body {
-    background-color: var(--background-dark);
-    color: var(--text-primary-dark);
+    background-color: var(--background);
+    color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
