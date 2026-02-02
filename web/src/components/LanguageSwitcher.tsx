@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "@/i18n/routing";
 
 export function LanguageSwitcher({ className = "" }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
 
   const languages = [
     { code: "de", label: "Deutsch", flag: "🇩🇪" },
@@ -16,6 +17,12 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
   ];
 
   const currentLang = languages.find((l) => l.code === locale) || languages[0];
+
+  const handleLanguageChange = (newLocale: string) => {
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`;
+    router.replace(pathname, { locale: newLocale });
+    setIsOpen(false);
+  };
 
   return (
     <div className={`relative group z-50 ${className}`}>
@@ -35,11 +42,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
           {languages.map((lang) => (
             <button
               key={lang.code}
-              onClick={() => {
-                document.cookie = `NEXT_LOCALE=${lang.code}; path=/; max-age=31536000`;
-                router.refresh();
-                setIsOpen(false);
-              }}
+              onClick={() => handleLanguageChange(lang.code)}
               className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 transition-colors ${
                 locale === lang.code
                   ? "bg-purple-50 dark:bg-purple-600/20 text-purple-700 dark:text-purple-400 font-medium"

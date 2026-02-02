@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import api from "@/lib/api";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function LoginPage() {
   const t = useTranslations("Auth");
@@ -51,10 +52,11 @@ export default function LoginPage() {
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         }}
       >
-        <div className="relative z-10">
+        <div className="relative z-10 flex justify-between items-center">
           <Link href="/" className="text-white text-3xl font-bold">
             Nexus Media
           </Link>
+          <LanguageSwitcher />
         </div>
 
         <div className="relative z-10 flex-1 flex flex-col justify-center space-y-6">
@@ -85,6 +87,10 @@ export default function LoginPage() {
             >
               Nexus Media
             </Link>
+          </div>
+
+          <div className="lg:hidden flex justify-end mb-4">
+            <LanguageSwitcher />
           </div>
 
           <div className="space-y-2">
